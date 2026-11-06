@@ -4,23 +4,31 @@ EXTERNALSRC := src/externalSrc
 INCLUDE := include
 
 CC := g++
-FLAGS := 
+FLAGS := -std=c++20
+
+run: all
+	BSgameEngine.exe
 
 all: BSgameEngine
 
-MYDEPENDENCIES = $(SRC)/main.cpp $(SRC)/BSRenderer.cpp $(SRC)/BSAudioHandler.cpp $(SRC)/BSUserInterfaceHandler.cpp
+MY_DEPENDENCIES = $(SRC)/main.cpp $(SRC)/BSRenderer.o $(SRC)/BSAudioHandler.cpp $(SRC)/BSUserInterfaceHandler.cpp
+RENDER_DEPENDENCIES = $(EXTERNALSRC)/glad.c $(SRC)/BSRenderer.cpp
+RENDER_LIB = -lopengl32 -lgdi32
+WINDOW_LIB = -lglfw3 -lgdi32
 
-BSgameEngine: $(MYDEPENDENCIES)
-	$(CC) $(FLAGS) -o BSgameEngine $(MYDEPENDENCIES) -I./include
+BSgameEngine: $(MY_DEPENDENCIES)
+	$(CC) $(FLAGS) -o BSgameEngine $(MY_DEPENDENCIES) -I./include
 
-BSRenderer.cpp: $(EXTERNALSRC)/glad.c $(INCLUDE)/stb_image.h $(INCLUDE)/glad/glad.h $(INCLUDE)/KHR/khrplatform.h $(INCLUDE)/Renderer.h
+$(SRC)/BSRenderer.o:  $(SRC)/BSRenderer.cpp $(RENDER_DEPENDENCIES)
+	$(CC) $(FLAGS) -c -o BSRenderer.o $(SRC)/BSRenderer.cpp -I./include
 
-BSAudioHandler.cpp: $(INCLUDE)/miniaudio.h
+$(SRC)/BSAudioHandler.cpp: $(INCLUDE)/miniaudio.h -I./include
 
-BSUserInterfaceHandler.cpp: $(LIB)/libglfw3.a $(INCLUDE)/GLFW/glfw3.h $(SRC)/windowHandler.cpp $(SRC)/inputHandler.cpp
+$(SRC)/BSUserInterfaceHandler.cpp: $(LIB)/libglfw3.a $(INCLUDE)/GLFW/glfw3.h $(SRC)/windowHandler.cpp $(SRC)/inputHandler.cpp
 
-BSManagerThread.cpp:
+$(SRC)BSManagerThread.cpp:
 
-BSPhysics.cpp:
+$(SRC)BSPhysics.cpp:
+
 clean:
 	rm BSgameEngine.exe

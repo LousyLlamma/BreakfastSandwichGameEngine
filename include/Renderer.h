@@ -1,6 +1,6 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-std::jthread enterRenderThread();
+std::jthread enterRenderThread(int n);
 
 #endif //RENDERER_H

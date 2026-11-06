@@ -6,7 +6,7 @@
 int main() {
 
 	std::cout << "Hello world!" << std::endl;
-	std::jthread renderThread = enterRenderThread();
+	std::jthread renderThread = enterRenderThread(3);
 
 
 	renderThread.join();
